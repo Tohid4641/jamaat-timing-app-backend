@@ -11,10 +11,13 @@ const signup = async (req, res, next) => {
 
         const hashPassword = await bcrypt.hash(req.body.password, 10);
 
+        const { confirmPassword, ...otherData } = req.body;
+
         const user = new User({
-            ...req.body,
+            ...otherData,
             password: hashPassword
         });
+
 
         await user.save();
 
@@ -28,9 +31,9 @@ const login = async (req, res, next) => {
     try {
         validators.loginValidator(req.body);
 
-        const { emailId, password } = req.body;
+        const { email, password } = req.body;
 
-        const user = await User.findOne({emailId});
+        const user = await User.findOne({email});
 
         if(!user) throw new AppError("Invalid credentials", 400);
 
@@ -60,11 +63,11 @@ const logout = async (req, res, next) => {
 };
 
 const updatePassword = async (req, res, next) => {
-    const { newPassword, oldPassword, emailId } = req.body;
+    const { newPassword, oldPassword, email } = req.body;
     try {
         validators.updatePasswordValidator(req.body);
 
-        const user = await User.findOne({emailId});
+        const user = await User.findOne({email});
 
         if(!user) throw new AppError('User not found', 404);
 
