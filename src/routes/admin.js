@@ -3,7 +3,7 @@ const adminController = require('../controllers/admin');
 
 router.get('/test', (_,res) => res.send("TestOk"));
 
-// router.post('/country', adminController.name);
+router.post('/country', adminController.addCountry);
 // router.patch('/country/:id', adminController.name);
 // router.delete('/country/:id', adminController.name);
 

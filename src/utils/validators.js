@@ -1,7 +1,7 @@
 const validator = require('validator');
 const AppError = require('./appError');
 
-const signupValidator = (data) => {
+exports.signupValidator = (data) => {
     const { name, email, password, confirmPassword } = data;
 
     const allowedFields = ["name", "email", "password", "confirmPassword"];
@@ -21,7 +21,7 @@ const signupValidator = (data) => {
     }
 }
 
-const loginValidator = (data) => {
+exports.loginValidator = (data) => {
     const { email, password } = data;
     if(!email || !password){
         throw new AppError("Invalid Credentials", 400);
@@ -30,7 +30,7 @@ const loginValidator = (data) => {
     }
 }
 
-const updatePasswordValidator = (data) => {
+exports.updatePasswordValidator = (data) => {
     const { newPassword, oldPassword, email } = data;
 
     if(!newPassword || !oldPassword || !email){
@@ -42,8 +42,19 @@ const updatePasswordValidator = (data) => {
     }
 }
 
-module.exports = {
-    signupValidator,
-    loginValidator,
-    updatePasswordValidator
+exports.addCountryValidator = (data) => {
+    const { name, code } = data;
+
+    const allowedFields = ["name", "code"];
+
+    const checkAllowedFields = Object.keys(data).every( key => allowedFields.includes(key))
+
+    if(!name || !code || typeof name !== 'string' || typeof code !== 'string'){
+        throw new AppError("Please enter a valid inputs!", 400);
+    }else if(!checkAllowedFields){
+        throw new AppError('Only valid fields are allowed', 400);
+    }else if(!validator.isAlpha(name) || !validator.isAlpha(code)){
+        throw new AppError('Please enter a valid inputs', 400);
+    }
+    
 }

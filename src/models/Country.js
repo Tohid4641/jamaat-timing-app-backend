@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require("validator");
 
 const countrySchema = new mongoose.Schema({
     name:{
@@ -14,7 +15,8 @@ const countrySchema = new mongoose.Schema({
     code:{
         type:String,
         required:true,
-        unique:true
+        unique:true,
+        uppercase:true,
     }
 },
 {
