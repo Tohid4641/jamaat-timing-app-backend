@@ -42,12 +42,13 @@ exports.updatePasswordValidator = (data) => {
     }
 }
 
-exports.addCountryValidator = (data) => {
-    const { name, code } = data;
+exports.addCountryValidator = (req) => {
+    const { name, code } = req.body;
+    const { id } = req.params;
 
     const allowedFields = ["name", "code"];
 
-    const checkAllowedFields = Object.keys(data).every( key => allowedFields.includes(key))
+    const checkAllowedFields = Object.keys(req.body).every( key => allowedFields.includes(key))
 
     if(!name || !code || typeof name !== 'string' || typeof code !== 'string'){
         throw new AppError("Please enter a valid inputs!", 400);
@@ -55,6 +56,32 @@ exports.addCountryValidator = (data) => {
         throw new AppError('Only valid fields are allowed', 400);
     }else if(!validator.isAlpha(name) || !validator.isAlpha(code)){
         throw new AppError('Please enter a valid inputs', 400);
+    }else if(id){ // for update country
+        if(!validator.isAlphanumeric(id)){
+            throw new AppError('Please enter a valid inputs', 400);
+        }
+    }
+    
+}
+
+exports.addStateValidator = (req) => {
+    const { name, countryId } = req.body;
+    const { id } = req.params;
+
+    const allowedFields = ["name", "countryId"];
+
+    const checkAllowedFields = Object.keys(req.body).every( key => allowedFields.includes(key))
+
+    if(!name || !countryId || typeof name !== 'string' || typeof countryId !== 'string'){
+        throw new AppError("Please enter a valid inputs!", 400);
+    }else if(!checkAllowedFields){
+        throw new AppError('Only valid fields are allowed', 400);
+    }else if(!validator.isAlpha(name) || !validator.isAlphanumeric(countryId)){
+        throw new AppError('Please enter a valid inputs', 400);
+    }else if(id){ // for update country
+        if(!validator.isAlphanumeric(id)){
+            throw new AppError('Please enter a valid inputs', 400);
+        }
     }
     
 }
