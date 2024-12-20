@@ -21,6 +21,17 @@ const stateSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    toJSON: {
+      virtuals: true,
+      transform: (doc, ret) => {
+        if (ret.countryId) {
+          ret.country = ret.countryId;
+          delete ret.countryId;
+        }
+        return ret;
+      },
+    },
+    id: false
   }
 );
 

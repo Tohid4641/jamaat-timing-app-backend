@@ -15,11 +15,22 @@ const citySchema = new mongoose.Schema({
     stateId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: "State"
+        ref: "State",
     }
 },
-{
-    timestamps: true,
-});
+    {
+        timestamps: true,
+        toJSON: {
+            virtuals: true,
+            transform: (doc, ret) => {
+                if (ret.stateId) {
+                    ret.state = ret.stateId;
+                    delete ret.stateId;
+                }
+                return ret;
+            },
+        },
+        id: false
+    });
 
 module.exports = mongoose.model("City", citySchema);
