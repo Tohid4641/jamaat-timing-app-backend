@@ -85,3 +85,25 @@ exports.addStateValidator = (req) => {
     }
     
 }
+
+exports.addCityValidator = (req) => {
+    const { name, stateId } = req.body;
+    const { id } = req.params;
+
+    const allowedFields = ["name", "stateId"];
+
+    const checkAllowedFields = Object.keys(req.body).every( key => allowedFields.includes(key))
+
+    if(!name || !stateId || typeof name !== 'string' || typeof stateId !== 'string'){
+        throw new AppError("Please enter a valid inputs!", 400);
+    }else if(!checkAllowedFields){
+        throw new AppError('Only valid fields are allowed', 400);
+    }else if(!validator.isAlpha(name) || !validator.isAlphanumeric(stateId)){
+        throw new AppError('Please enter a valid inputs', 400);
+    }else if(id){ // for update country
+        if(!validator.isAlphanumeric(id)){
+            throw new AppError('Please enter a valid inputs', 400);
+        }
+    }
+    
+}

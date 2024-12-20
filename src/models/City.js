@@ -12,7 +12,7 @@ const citySchema = new mongoose.Schema({
             }
         }
     },
-    state: {
+    stateId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: "State"
