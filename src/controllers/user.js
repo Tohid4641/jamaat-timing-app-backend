@@ -28,8 +28,30 @@ exports.getMasjids = async (req, res, next) => {
 };
 
 exports.getMasjidNamaazTiming = async (req, res, next) => {
+  const { masjidId } = req.params;
   try {
-    const masjidTiming = await MasjidNamaazTiming.find()
+    const masjidTiming = await MasjidNamaazTiming.find({ masjidId })
+      .select('azaanTime jamaatTime masjidId namaazId')
+      .populate({
+        path: 'masjidId',
+        select: 'name desc cityId',
+        populate: {
+          path: "cityId",
+          select: "name stateId",
+          populate: {
+            path: "stateId",
+            select: "name countryId",
+            populate: {
+              path: "countryId",
+              select: "name code",
+            },
+          },
+        }
+      }).populate({
+        path: 'namaazId',
+        select: 'name'
+      })
+
     successResponse(res, "Masjids timing fetch successfull!!", 200, masjidTiming);
   } catch (error) {
     next(error);
