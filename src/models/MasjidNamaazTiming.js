@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require("validator");
 
-const masjidJamaatTimingSchema = new mongoose.Schema({
+const masjidNamaazTimingSchema = new mongoose.Schema({
     azaanTime: {
         type: String,
         required: true
@@ -26,4 +26,4 @@ const masjidJamaatTimingSchema = new mongoose.Schema({
         timestamps: true,
     });
 
-module.exports = mongoose.model("MasjidJamaatTiming", masjidJamaatTimingSchema);
+module.exports = mongoose.model("MasjidNamaazTiming", masjidNamaazTimingSchema);

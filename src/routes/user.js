@@ -1,10 +1,12 @@
 const router = require('express').Router();
 const userController = require('../controllers/user');
+const commonController = require('../controllers/common');
 
-// router.get('/countries', userController.name);
-// router.get('/states', userController.name);
-// router.get('/cities', userController.name);
-// router.get('/masjid', userController.name);
+router.get('/countries', commonController.getCountries);
+router.get('/states', commonController.getStates);
+router.get('/cities', commonController.getCities);
+router.get('/masjids', userController.getMasjids);
+router.get('/masjid-namaaz-timing/:masjidId', userController.getMasjidNamaazTiming);
 // router.get('/masjid/:id', userController.name);
 
 module.exports = router;
