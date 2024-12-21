@@ -4,7 +4,6 @@ const State = require("../models/State");
 const { successResponse } = require("../utils/responseHandler");
 const AppError = require("../utils/appError");
 const City = require("../models/City");
-const Masjid = require("../models/Masjid");
 const Namaaz = require("../models/Namaaz");
 const MasjidNamaazTiming = require("../models/MasjidNamaazTiming");
 
@@ -200,20 +199,6 @@ exports.deleteCity = async (req, res, next) => {
     await City.findOneAndDelete({ _id: id });
 
     successResponse(res, "city deleted successfull!!", 200);
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.addMasjid = async (req, res, next) => {
-  try {
-    validators.addMasjidValidator(req);
-
-    const newMasjid = new Masjid(req.body);
-
-    await newMasjid.save();
-
-    successResponse(res, "Masjid added successfull!!", 201, newMasjid);
   } catch (error) {
     next(error);
   }

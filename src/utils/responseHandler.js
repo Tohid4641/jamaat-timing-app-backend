@@ -7,8 +7,8 @@ function successResponse(res, message = 'Success', statusCode = 200, data = unde
     });
 }
 
-function errorResponse(res, error, statusCode = 500) {
-    const message = error.message || 'Internal Server Error';
+function errorResponse(res, error, errorMessage="Internal Server Error", statusCode = 500) {
+    const message = error.message || errorMessage;
     return res.status(statusCode).json({
         success: false,
         message,

@@ -2,6 +2,7 @@ const validators = require("../utils/validators");
 const Country = require("../models/Country");
 const State = require("../models/State");
 const City = require("../models/City");
+const Masjid = require("../models/Masjid");
 const { successResponse } = require("../utils/responseHandler");
 const AppError = require("../utils/appError");
 
@@ -52,6 +53,20 @@ exports.getCities = async (req, res, next) => {
     if (!findCities) throw new AppError(`city is not found`, 404);
 
     successResponse(res, "list of cities fetch successfull!!", 200, findCities);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.addMasjid = async (req, res, next) => {
+  try {
+    validators.addMasjidValidator(req);
+
+    const newMasjid = new Masjid(req.body);
+
+    await newMasjid.save();
+
+    successResponse(res, "Masjid added successfull!!", 201, newMasjid);
   } catch (error) {
     next(error);
   }
