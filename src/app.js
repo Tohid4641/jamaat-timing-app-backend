@@ -6,13 +6,17 @@ const adminRouter = require("./routes/admin");
 const apiLogger = require("./utils/apiLogger");
 const globalErrorHandler = require("./utils/globalErrorHandler");
 const cookieParser = require("cookie-parser");
+require("dotenv").config({ path: "./.env" });
 
 const app = express();
-const port = 8888;
+const { PORT, BASE_URL } = process.env;
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(apiLogger);
+
+// static path for images
+app.use("/api/public", express.static("public"));
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
@@ -23,9 +27,9 @@ app.use(globalErrorHandler);
 connectDB()
   .then(() => {
     console.log("Database connected!!");
-    app.listen(port, () =>
+    app.listen(PORT, () =>
       console.log(
-        `JamaatTimingApp backend server is listening on ::: http://localhost:${port}`
+        `JamaatTimingApp backend server is listening on ::: ${BASE_URL}`
       )
     );
   })

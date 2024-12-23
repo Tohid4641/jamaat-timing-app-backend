@@ -3,6 +3,7 @@ const adminController = require("../controllers/admin");
 const commonController = require("../controllers/common");
 const authAdmin = require("../middlewares/authAdmin");
 const authSuperAdmin = require("../middlewares/authSuperAdmin");
+const upload = require('../middlewares/upload');
 
 router.get("/test", (_, res) => res.send("TestOk"));
 
@@ -25,6 +26,11 @@ router.patch("/city/:id", [authAdmin, authSuperAdmin] , adminController.updateCi
 router.delete("/city/:id", [authAdmin, authSuperAdmin] , adminController.deleteCity);
 
 router.post("/masjid", [authAdmin], commonController.addMasjid);
+router.patch(
+    "/upload/namaz-timing-chart/:masjidId", 
+    [authAdmin, upload.single('timesheet')], 
+    commonController.uploadNamazTimingChart
+);
 router.post("/namaaz", [authAdmin, authSuperAdmin] , adminController.addNamaaz);
 router.post("/masjid-namaaz-timing", [authAdmin, authSuperAdmin] , adminController.addMasjidNamaazTiming);
 

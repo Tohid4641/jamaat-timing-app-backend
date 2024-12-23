@@ -209,3 +209,32 @@ exports.addMasjidNamaazTimingValidator = (req) => {
     }
   }
 };
+
+exports.uploadNamazTimingChartValidator = (req) => {
+  if (!req.params.masjidId || !validator.isAlphanumeric(req.params.masjidId))
+    throw new AppError("Invalid Masjid ID", 400);
+};
+
+exports.filesUploadValidator = (file, cb) => {
+  const allowedExtensions = ["png", "jpeg", "jpg"];
+  const allowedMimeTypes = ["image/png", "image/jpeg", "image/jpg"];
+  const maxFileSizeMB = 2;
+
+  const fileExtension = file.originalname.split(".").pop().toLowerCase();
+  const fileSizeMB = file.size / (1024 * 1024);
+
+  // Validate extension and MIME type
+  if (
+    !allowedExtensions.includes(fileExtension) ||
+    !allowedMimeTypes.includes(file.mimetype)
+  ) {
+    return cb(new AppError("Invalid file type", 400), false); // Reject file
+  }
+
+  // Validate size
+  if (fileSizeMB > maxFileSizeMB) {
+    return cb(new AppError("File size exceeds the limit", 400), false); // Reject file
+  }
+
+  cb(null, true); // Accept file
+};

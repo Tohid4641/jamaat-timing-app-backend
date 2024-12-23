@@ -14,6 +14,9 @@ const masjidSchema = new mongoose.Schema({
     desc: {
         type: String,
     },
+    namazTimingChartUrl: {
+        type: String,
+    },
     cityId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
