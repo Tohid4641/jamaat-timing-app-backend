@@ -43,7 +43,7 @@ exports.login = async (req, res, next) => {
 
     res.cookie("token", token);
 
-    successResponse(res, "login successfull!!");
+    successResponse(res, "login successfull!!", 200, user);
   } catch (error) {
     next(error);
   }
