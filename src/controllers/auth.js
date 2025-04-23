@@ -19,6 +19,10 @@ exports.signup = async (req, res, next) => {
 
     await user.save();
 
+    const token = await user.getJWT();
+
+    res.cookie("token", token);
+
     successResponse(res, "signup successfull!!", 201, user);
   } catch (error) {
     next(error);
