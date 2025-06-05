@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const validator = require("validator");
 
 const countrySchema = new mongoose.Schema({
-    name:{
+    name: {
         type: String,
-        required:true,
+        required: true,
         lowercase: true,
         validate: (v) => {
             if (!validator.isAlpha(v)) {
@@ -12,14 +12,18 @@ const countrySchema = new mongoose.Schema({
             }
         }
     },
-    code:{
-        type:String,
-        required:true,
-        uppercase:true,
+    code: {
+        type: String,
+        required: true,
+        uppercase: true,
+    },
+    continent: {
+        type: String, // e.g. "Asia", "Europe"
+        lowercase: true,
     }
 },
-{
-    timestamps: true,
-});
+    {
+        timestamps: true,
+    });
 
 module.exports = mongoose.model("Country", countrySchema);

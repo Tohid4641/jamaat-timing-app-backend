@@ -18,6 +18,12 @@ const stateSchema = new mongoose.Schema(
       required: true,
       ref: "Country",
     },
+    type: {
+      type: String,
+      enum: ['state', 'province', 'emirate', 'county'],
+      default: 'state',
+    }
+
   },
   {
     timestamps: true,

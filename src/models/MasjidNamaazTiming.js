@@ -26,4 +26,6 @@ const masjidNamaazTimingSchema = new mongoose.Schema({
         timestamps: true,
     });
 
+masjidNamaazTimingSchema.index({ masjidId: 1, namaazId: 1 }, { unique: true });
+
 module.exports = mongoose.model("MasjidNamaazTiming", masjidNamaazTimingSchema);

@@ -1,7 +1,7 @@
 const validators = require("../utils/validators");
 const Country = require("../models/Country");
 const State = require("../models/State");
-const { successResponse } = require("../utils/responseHandler");
+const { successResponse, errorResponse } = require("../utils/responseHandler");
 const AppError = require("../utils/appError");
 const City = require("../models/City");
 const Namaaz = require("../models/Namaaz");
@@ -221,6 +221,10 @@ exports.addNamaaz = async (req, res, next) => {
 exports.addMasjidNamaazTiming = async (req, res, next) => {
   try {
     validators.addMasjidNamaazTimingValidator(req);
+
+    const alreadyExist = await MasjidNamaazTiming.findOne({ masjidId: req.body.masjidId, namaazId: req.body.namaazId });
+
+    if (alreadyExist) throw new AppError(`Duplicate Entry Error`, 400);
 
     const newTiming = new MasjidNamaazTiming(req.body);
 
