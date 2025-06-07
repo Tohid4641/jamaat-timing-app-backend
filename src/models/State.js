@@ -8,7 +8,7 @@ const stateSchema = new mongoose.Schema(
       required: true,
       lowercase: true,
       validate: (v) => {
-        if (!validator.isAlpha(v)) {
+        if (!(v.trim().split(' ').every(part => validator.isAlpha(part)))) {
           throw new Error("State name name should contain only letters'");
         }
       },
@@ -18,7 +18,7 @@ const stateSchema = new mongoose.Schema(
       required: true,
       ref: "Country",
     },
-    type: {
+    type: { 
       type: String,
       enum: ['state', 'province', 'emirate', 'county'],
       default: 'state',

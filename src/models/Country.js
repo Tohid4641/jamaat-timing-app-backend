@@ -7,7 +7,7 @@ const countrySchema = new mongoose.Schema({
         required: true,
         lowercase: true,
         validate: (v) => {
-            if (!validator.isAlpha(v)) {
+            if (!(v.trim().split(' ').every(part => validator.isAlpha(part)))) {
                 throw new Error("Country name should contain only letters'")
             }
         }
@@ -19,6 +19,7 @@ const countrySchema = new mongoose.Schema({
     },
     continent: {
         type: String, // e.g. "Asia", "Europe"
+        enum: ['asia', 'europe', 'north-america', 'south-america', 'australia', 'antarctica'],
         lowercase: true,
     }
 },

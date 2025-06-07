@@ -45,10 +45,10 @@ exports.updatePasswordValidator = (data) => {
 };
 
 exports.addCountryValidator = (req) => {
-  const { name, code } = req.body;
+  const { name, code, continent } = req.body;
   const { id } = req.params;
 
-  const allowedFields = ["name", "code"];
+  const allowedFields = ["name", "code", "continent"];
 
   const checkAllowedFields = Object.keys(req.body).every((key) =>
     allowedFields.includes(key)
@@ -58,21 +58,28 @@ exports.addCountryValidator = (req) => {
     throw new AppError("Please enter a valid inputs!", 400);
   } else if (!checkAllowedFields) {
     throw new AppError("Only valid fields are allowed", 400);
-  } else if (!validator.isAlpha(name) || !validator.isAlpha(code)) {
+  } else if (!(name.trim().split(' ').every(part => validator.isAlpha(part))) || !validator.isAlpha(code)) {
     throw new AppError("Please enter a valid inputs", 400);
   } else if (id) {
     // for update country
     if (!validator.isAlphanumeric(id)) {
       throw new AppError("Please enter a valid inputs", 400);
     }
+  } else if (continent) {
+    if (typeof continent !== 'string') throw new AppError("Please enter a valid inputs!", 400);
+    const allowedContinents = ['asia', 'europe', 'north-america', 'south-america', 'australia', 'antarctica', 'Asia', 'Europe', 'North-America', 'South-America', 'Australia', 'Antarctica'];
+
+    if (!allowedContinents.includes(continent)) {
+      throw new AppError("Only valid continents are allowed", 400);
+    }
   }
 };
 
 exports.addStateValidator = (req) => {
-  const { name, countryId } = req.body;
+  const { name, countryId, type } = req.body;
   const { id } = req.params;
 
-  const allowedFields = ["name", "countryId"];
+  const allowedFields = ["name", "countryId", "type"];
 
   const checkAllowedFields = Object.keys(req.body).every((key) =>
     allowedFields.includes(key)
@@ -87,43 +94,52 @@ exports.addStateValidator = (req) => {
     throw new AppError("Please enter a valid inputs!", 400);
   } else if (!checkAllowedFields) {
     throw new AppError("Only valid fields are allowed", 400);
-  } else if (!validator.isAlpha(name) || !validator.isAlphanumeric(countryId)) {
+  } else if (!(name.trim().split(' ').every(part => validator.isAlpha(part))) || !validator.isAlphanumeric(countryId)) {
     throw new AppError("Please enter a valid inputs", 400);
   } else if (id) {
     // for update
     if (!validator.isAlphanumeric(id)) {
       throw new AppError("Please enter a valid inputs", 400);
     }
+  }
+
+  // type is optional --- default added in schema = state
+  if (type) {
+    const allowedTypeFields = ['state', 'province', 'emirate', 'county'];
+
+    if (!allowedTypeFields.includes(type)) {
+      throw new AppError("Only valid 'type' are allowed", 400);
+    }
+
   }
 };
 
 exports.addCityValidator = (req) => {
-  const { name, stateId } = req.body;
+  const { name, stateId, countryId } = req.body;
   const { id } = req.params;
 
-  const allowedFields = ["name", "stateId"];
+  console.log(req.body)
+  const allowedFields = ["name", "stateId", "countryId", "isCapital"];
 
   const checkAllowedFields = Object.keys(req.body).every((key) =>
-    allowedFields.includes(key)
-  );
+    allowedFields.includes(key));
 
-  if (
-    !name ||
-    !stateId ||
-    typeof name !== "string" ||
-    typeof stateId !== "string"
-  ) {
+  if (name && typeof name !== "string") {
     throw new AppError("Please enter a valid inputs!", 400);
   } else if (!checkAllowedFields) {
     throw new AppError("Only valid fields are allowed", 400);
-  } else if (!validator.isAlpha(name) || !validator.isAlphanumeric(stateId)) {
+  } else if (name && !name.trim().split(' ').every(part => validator.isAlpha(part))) {
     throw new AppError("Please enter a valid inputs", 400);
-  } else if (id) {
+  } else if (id && !validator.isAlphanumeric(id)) {
     // for update
-    if (!validator.isAlphanumeric(id)) {
-      throw new AppError("Please enter a valid inputs", 400);
-    }
-  }
+    throw new AppError("Please enter a valid inputs", 400);
+  } else if (stateId &&
+    (typeof stateId !== "string" || !validator.isAlphanumeric(stateId)))
+    throw new AppError("Please enter a valid inputs!", 400)
+  else if
+    (countryId && (typeof countryId !== "string" || !validator.isAlphanumeric(countryId)))
+    throw new AppError("Please enter a valid inputs!", 400);
+
 };
 
 exports.addMasjidValidator = (req) => {

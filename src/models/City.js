@@ -7,10 +7,14 @@ const citySchema = new mongoose.Schema({
     required: true,
     lowercase: true,
     validate: (v) => {
-      if (!validator.isAlpha(v)) {
+      if (!(v.trim().split(' ').every(part => validator.isAlpha(part)))) {
         throw new Error("City name should contain only letters");
       }
     }
+  },
+  isCapital: {
+    type: Boolean,
+    default: false,
   },
   stateId: {
     type: mongoose.Schema.Types.ObjectId,
